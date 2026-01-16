@@ -1,689 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday My Love ❤️</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday My Love ❤️</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
-        /* COUNTDOWN SCREEN */
-        #countdown-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 1s ease, transform 1s ease;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    font-family:'Poppins',sans-serif;
+    background:#0a0a0a;
+    color:#fff;
+    overflow-x:hidden;
+}
 
-        #countdown-screen.hidden {
-            opacity: 0;
-            transform: scale(0.8);
-            pointer-events: none;
-        }
+/* ===== BACKGROUND ===== */
+.animated-bg{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background:linear-gradient(45deg,#ff006e,#8338ec,#3a86ff,#06ffa5);
+    background-size:400% 400%;
+    animation:gradientShift 18s ease infinite;
+}
+@keyframes gradientShift{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
 
-        .countdown-message {
-            font-size: 2rem;
-            color: white;
-            margin-bottom: 2rem;
-            text-align: center;
-            animation: fadeInPulse 2s infinite;
-        }
+/* ===== COUNTDOWN ===== */
+#countdown-screen{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.96);
+    backdrop-filter:blur(25px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    transition:1.2s ease;
+}
+#countdown-screen.hidden{
+    opacity:0;
+    transform:scale(1.4);
+    pointer-events:none;
+}
 
-        @keyframes fadeInPulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
+.countdown-message{
+    font-size:3rem;
+    font-weight:900;
+    background:linear-gradient(45deg,#ff006e,#8338ec,#3a86ff,#06ffa5);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:gradientShift 4s infinite,pulse 2s infinite;
+    margin-bottom:3.5rem;
+    text-align:center;
+}
+@keyframes pulse{50%{transform:scale(1.06)}}
 
-        .countdown-timer {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+.countdown-timer{
+    display:flex;
+    gap:2.5rem;
+    flex-wrap:wrap;
+    justify-content:center;
+}
 
-        .time-unit {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            min-width: 120px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
+.time-unit{
+    background:rgba(255,255,255,.06);
+    border-radius:30px;
+    padding:2.5rem 2rem;
+    min-width:140px;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.time-value{
+    font-size:4rem;
+    font-weight:900;
+    background:linear-gradient(135deg,#06ffa5,#3a86ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+.time-label{
+    font-size:1rem;
+    letter-spacing:3px;
+    opacity:.6;
+    text-transform:uppercase;
+}
 
-        .time-value {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #fff;
-            display: block;
-        }
+/* BYPASS BUTTON */
+.bypass-btn{
+    margin-top:3rem;
+    padding:1rem 2.8rem;
+    border-radius:40px;
+    border:2px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+    transition:.4s;
+}
+.bypass-btn:hover{
+    background:#06ffa5;
+    color:#000;
+    transform:scale(1.08);
+}
 
-        .time-label {
-            font-size: 1rem;
-            color: #f0f0f0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 0.5rem;
-        }
+/* ===== MAIN ===== */
+#main-content{display:none;opacity:0;animation:fadeIn 2s forwards}
+#main-content.visible{display:block}
+@keyframes fadeIn{to{opacity:1}}
 
-        /* Floating hearts animation */
-        .floating-heart {
-            position: absolute;
-            font-size: 2rem;
-            animation: floatUp 4s infinite ease-in;
-            opacity: 0;
-        }
+section{
+    min-height:100vh;
+    padding:8rem 2rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
+/* ===== HERO ===== */
+.hero{text-align:center}
+.hero h1{
+    font-size:6rem;
+    font-weight:900;
+    background:linear-gradient(45deg,#ff006e,#8338ec,#3a86ff,#06ffa5);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:gradientShift 4s infinite;
+}
+.hero p{font-size:2rem;opacity:.9;margin:2rem 0}
+.cta{
+    display:inline-block;
+    padding:1.4rem 3.5rem;
+    border-radius:50px;
+    background:linear-gradient(135deg,#ff006e,#8338ec);
+    color:white;
+    text-decoration:none;
+    font-weight:700;
+    box-shadow:0 20px 60px rgba(255,0,110,.5);
+    transition:.4s;
+}
+.cta:hover{transform:scale(1.08)}
 
-        /* CONFETTI ANIMATION */
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f0f;
-            position: absolute;
-            animation: confettiFall 3s linear;
-            z-index: 9999;
-        }
+/* ===== GALLERY ===== */
+.gallery{
+    background:rgba(0,0,0,.65);
+}
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:3rem;
+    max-width:1400px;
+    margin:auto;
+}
+.gallery-item{
+    aspect-ratio:1;
+    border-radius:30px;
+    background:linear-gradient(135deg,rgba(255,0,110,.25),rgba(131,56,236,.25));
+    transition:.5s;
+}
+.gallery-item:hover{transform:translateY(-15px) scale(1.05)}
 
-        @keyframes confettiFall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
+/* ===== TIMELINE ===== */
+.timeline{max-width:1200px;margin:auto}
+.timeline-item{
+    margin-bottom:4rem;
+    opacity:0;
+    transform:translateY(80px);
+    transition:.8s;
+}
+.timeline-item.visible{opacity:1;transform:none}
+.timeline-content{
+    background:rgba(255,255,255,.06);
+    padding:3rem;
+    border-radius:30px;
+}
+.timeline-date{color:#06ffa5;font-weight:700}
+.timeline-title{font-size:2rem;font-weight:800;margin:1rem 0}
 
-        /* MAIN CONTENT */
-        #main-content {
-            display: none;
-            opacity: 0;
-            animation: fadeIn 1.5s forwards;
-        }
+/* ===== LOVE NOTE ===== */
+.love-note{text-align:center}
+.letter{
+    max-width:900px;
+    margin:auto;
+    background:rgba(255,255,255,.06);
+    padding:5rem;
+    border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,.9);
+}
+.signature{
+    font-size:2rem;
+    font-weight:900;
+    background:linear-gradient(45deg,#ff006e,#8338ec,#3a86ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
 
-        #main-content.visible {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* HERO SECTION */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: moveBackground 20s linear infinite;
-        }
-
-        @keyframes moveBackground {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            color: white;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
-            margin-bottom: 1rem;
-            animation: bounceIn 1s;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 2rem;
-        }
-
-        .cta-button {
-            background: white;
-            color: #f5576c;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: inline-block;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        /* SECTION STYLING */
-        section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        section h2 {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* GALLERY SECTION */
-        .gallery {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            aspect-ratio: 1;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* TIMELINE SECTION */
-        .timeline-section {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-        }
-
-        .timeline {
-            position: relative;
-            padding: 2rem 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, #667eea, #764ba2);
-        }
-
-        .timeline-item {
-            display: flex;
-            margin-bottom: 3rem;
-            position: relative;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.6s, transform 0.6s;
-        }
-
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .timeline-item:nth-child(odd) {
-            flex-direction: row;
-        }
-
-        .timeline-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .timeline-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            width: 45%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border: 4px solid #667eea;
-            border-radius: 50%;
-            z-index: 1;
-        }
-
-        .timeline-date {
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-
-        .timeline-desc {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* LOVE NOTE SECTION */
-        .love-note {
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-            text-align: center;
-        }
-
-        .letter {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .letter::before {
-            content: '❤️';
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 3rem;
-            animation: heartbeat 1.5s infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.2); }
-        }
-
-        .letter p {
-            font-size: 1.2rem;
-            line-height: 2;
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-style: italic;
-        }
-
-        .letter .signature {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* MOBILE RESPONSIVE */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.2rem;
-            }
-
-            section h2 {
-                font-size: 2rem;
-            }
-
-            .time-unit {
-                min-width: 80px;
-                padding: 1rem;
-            }
-
-            .time-value {
-                font-size: 2rem;
-            }
-
-            .countdown-message {
-                font-size: 1.5rem;
-                padding: 0 1rem;
-            }
-
-            .timeline::before {
-                left: 20px;
-            }
-
-            .timeline-item {
-                flex-direction: column !important;
-            }
-
-            .timeline-content {
-                width: 100%;
-                margin-left: 40px;
-            }
-
-            .timeline-dot {
-                left: 20px;
-            }
-        }
-    </style>
+/* ===== FOOTER ===== */
+footer{
+    padding:6rem 2rem;
+    text-align:center;
+    opacity:.6;
+    font-size:1.3rem;
+}
+</style>
 </head>
+
 <body>
-    <!-- COUNTDOWN SCREEN -->
-    <div id="countdown-screen">
-        <div class="countdown-message">
-            Something magical is coming… 💫
-        </div>
-        <div class="countdown-timer">
-            <div class="time-unit">
-                <span class="time-value" id="days">00</span>
-                <span class="time-label">Days</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-value" id="hours">00</span>
-                <span class="time-label">Hours</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-value" id="minutes">00</span>
-                <span class="time-label">Minutes</span>
-            </div>
-            <div class="time-unit">
-                <span class="time-value" id="seconds">00</span>
-                <span class="time-label">Seconds</span>
-            </div>
-        </div>
+<div class="animated-bg"></div>
+
+<div id="countdown-screen">
+    <div class="countdown-message">✨ Something Magical Is Coming ✨</div>
+    <div class="countdown-timer">
+        <div class="time-unit"><div id="days" class="time-value">00</div><div class="time-label">Days</div></div>
+        <div class="time-unit"><div id="hours" class="time-value">00</div><div class="time-label">Hours</div></div>
+        <div class="time-unit"><div id="minutes" class="time-value">00</div><div class="time-label">Minutes</div></div>
+        <div class="time-unit"><div id="seconds" class="time-value">00</div><div class="time-label">Seconds</div></div>
     </div>
+    <button class="bypass-btn" id="bypassBtn">Skip for Testing →</button>
+</div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main-content">
-        <!-- HERO SECTION -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Happy Birthday My Love ❤️</h1>
-                <p>To the most amazing person in my world 💖</p>
-                <a href="#gallery" class="cta-button">Scroll to relive our journey ✨</a>
-            </div>
-        </section>
+<div id="main-content">
 
-        <!-- GALLERY SECTION -->
-        <section class="gallery" id="gallery">
-            <h2>Our Beautiful Memories 📸</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">📷</div>
-                <div class="gallery-item">📷</div>
-                <div class="gallery-item">📷</div>
-                <div class="gallery-item">📷</div>
-                <div class="gallery-item">📷</div>
-                <div class="gallery-item">📷</div>
-                <!-- Add more items or replace with <img src="your-image.jpg" alt="Memory"> -->
-            </div>
-        </section>
+<section class="hero">
+    <h1>Happy Birthday My Love ❤️</h1>
+    <p>To the most incredible person in my universe</p>
+    <a href="#gallery" class="cta">Begin Our Journey ✨</a>
+</section>
 
-        <!-- TIMELINE SECTION -->
-        <section class="timeline-section">
-            <h2>Our Journey Together 💕</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-date">January 14, 2023</div>
-                        <div class="timeline-title">The Day We Met ✨</div>
-                        <div class="timeline-desc">
-                            The moment I saw you, I knew my life would never be the same. Your smile lit up the entire room.
-                        </div>
-                    </div>
-                    <div class="timeline-dot"></div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-date">March 20, 2023</div>
-                        <div class="timeline-title">Our First Date 💑</div>
-                        <div class="timeline-desc">
-                            Coffee turned into hours of laughter and conversation. I never wanted that day to end.
-                        </div>
-                    </div>
-                    <div class="timeline-dot"></div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-date">June 15, 2023</div>
-                        <div class="timeline-title">Making It Official 💖</div>
-                        <div class="timeline-desc">
-                            The day you said yes to being mine forever. Best decision of my life.
-                        </div>
-                    </div>
-                    <div class="timeline-dot"></div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-date">December 25, 2023</div>
-                        <div class="timeline-title">Our First Holiday Together 🎄</div>
-                        <div class="timeline-desc">
-                            Creating traditions and memories that will last a lifetime.
-                        </div>
-                    </div>
-                    <div class="timeline-dot"></div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-date">Today 🎂</div>
-                        <div class="timeline-title">Celebrating You!</div>
-                        <div class="timeline-desc">
-                            Another year of loving you, and I can't wait for all the adventures ahead.
-                        </div>
-                    </div>
-                    <div class="timeline-dot"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- LOVE NOTE SECTION -->
-        <section class="love-note">
-            <h2>A Letter From My Heart 💌</h2>
-            <div class="letter">
-                <p>
-                    My dearest love,
-                </p>
-                <p>
-                    Every moment with you is a gift I treasure. You make the ordinary extraordinary, 
-                    and you fill my days with joy, laughter, and endless love. On your special day, 
-                    I want you to know how incredibly grateful I am to have you in my life.
-                </p>
-                <p>
-                    Here's to another year of adventures, dreams, and building our beautiful life together. 
-                    You deserve all the happiness in the world, and I promise to spend every day trying to give it to you.
-                </p>
-                <p>
-                    Happy Birthday, my love. I love you more than words could ever express. 🎉💖✨
-                </p>
-                <p class="signature">Forever yours ❤️</p>
-            </div>
-        </section>
+<section class="gallery" id="gallery">
+    <h2 style="text-align:center;font-size:4rem;margin-bottom:4rem;">Our Memories 📸</h2>
+    <div class="gallery-grid">
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
+        <div class="gallery-item"></div>
     </div>
+</section>
 
-    <script>
-        // ========== CONFIGURATION ==========
-        // CHANGE THIS DATE TO YOUR GIRLFRIEND'S BIRTHDAY
-        const BIRTHDAY_DATE = new Date('2026-02-14T00:00:00').getTime();
-        
-        // ========== COUNTDOWN LOGIC ==========
-        const countdownScreen = document.getElementById('countdown-screen');
-        const mainContent = document.getElementById('main-content');
-        
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = BIRTHDAY_DATE - now;
-            
-            if (distance < 0) {
-                // Birthday has arrived!
-                triggerCelebration();
-                return;
-            }
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-        }
-        
-        function triggerCelebration() {
-            // Create confetti
-            createConfetti();
-            
-            // Hide countdown screen
-            setTimeout(() => {
-                countdownScreen.classList.add('hidden');
-                mainContent.classList.add('visible');
-            }, 500);
-        }
-        
-        function createConfetti() {
-            const colors = ['#f093fb', '#f5576c', '#fbc2eb', '#a6c1ee', '#667eea', '#764ba2'];
-            
-            for (let i = 0; i < 100; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDelay = Math.random() * 2 + 's';
-                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                    confetti.style.height = (Math.random() * 10 + 5) + 'px';
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 30);
-            }
-        }
-        
-        // Start countdown
-        updateCountdown();
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        
-        // ========== FLOATING HEARTS ==========
-        function createFloatingHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.textContent = '💖';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDelay = Math.random() * 2 + 's';
-            countdownScreen.appendChild(heart);
-            
-            setTimeout(() => heart.remove(), 4000);
-        }
-        
-        setInterval(createFloatingHeart, 800);
-        
-        // ========== SCROLL ANIMATIONS ==========
-        const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            timelineItems.forEach(item => observer.observe(item));
-        });
-        
-        // ========== SMOOTH SCROLL ==========
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
+<section>
+    <div class="timeline">
+        <div class="timeline-item"><div class="timeline-content"><div class="timeline-date">Jan 14, 2023</div><div class="timeline-title">We Met ✨</div><p>And nothing was the same.</p></div></div>
+        <div class="timeline-item"><div class="timeline-content"><div class="timeline-date">Today 🎂</div><div class="timeline-title">Still Choosing You</div><p>Every single day.</p></div></div>
+    </div>
+</section>
+
+<section class="love-note">
+    <div class="letter">
+        <p>Happy Birthday my love.</p>
+        <p>You are my favorite story.</p>
+        <div class="signature">Forever & Always ❤️</div>
+    </div>
+</section>
+
+<footer>
+    Built with love. End of our story? Nah. Just the beginning.
+</footer>
+
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+const TEST_MODE = true; // set false when going live
+const REAL_BIRTHDAY = new Date("2026-02-14T00:00:00").getTime();
+
+/* ================= LOGIC ================= */
+const countdownScreen=document.getElementById("countdown-screen");
+const mainContent=document.getElementById("main-content");
+const bypassBtn=document.getElementById("bypassBtn");
+
+let targetTime = TEST_MODE
+    ? Date.now() + 10_000
+    : REAL_BIRTHDAY;
+
+if(!TEST_MODE) bypassBtn.style.display="none";
+
+let revealed=false;
+
+function reveal(){
+    if(revealed) return;
+    revealed=true;
+    countdownScreen.classList.add("hidden");
+    mainContent.classList.add("visible");
+    clearInterval(timer);
+}
+
+function update(){
+    const diff=targetTime-Date.now();
+    if(diff<=0){reveal();return;}
+    days.textContent=Math.floor(diff/86400000);
+    hours.textContent=Math.floor(diff/3600000)%24;
+    minutes.textContent=Math.floor(diff/60000)%60;
+    seconds.textContent=Math.floor(diff/1000)%60;
+}
+
+bypassBtn.onclick=reveal;
+
+const timer=setInterval(update,1000);
+update();
+
+/* Timeline reveal */
+const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>x.isIntersecting&&x.target.classList.add("visible"))
+},{threshold:.2});
+document.querySelectorAll(".timeline-item").forEach(i=>obs.observe(i));
+</script>
+
 </body>
 </html>
